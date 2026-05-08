@@ -1,31 +1,35 @@
-public class MyQueue {
-    private static class Node{
-        Object object;
-        Node prev;
-        Node next;
-        Node(Object object,Node prev, Node next){
-            this.object=object;
-            this.prev=prev;
-            this.next=next;
-        }
-    }
-    private int size=0;
-    private Node first;
-    private Node last;
-    public void add(Object object){
-        Node node = new Node(object,last,null);
-        Node l = last;
-        this.last = node;
-        node.prev = l;
-        this.size++;
-        if (first==null){
-            first=node;
-        }
+public class MyQueue<T> {
+    private static class Node<T> {
+        T object;
+        Node<T> prev;
+        Node<T> next;
 
+        Node(T object, Node<T> prev, Node<T> next) {
+            this.object = object;
+            this.prev = prev;
+            this.next = next;
+        }
     }
+
+    private int size = 0;
+    private Node<T> first;
+    private Node<T> last;
+
+    public void add(T object) {
+        Node<T> l = last;
+        Node<T> node = new Node<>(object, l, null);
+        this.last = node;
+        if (first == null) {
+            first = node;
+        } else {
+            l.next = node;
+        }
+        this.size++;
+    }
+
     public void clear() {
-        for (Node x = first; x != null; ) {
-            Node n = x.next;
+        for (Node<T> x = first; x != null; ) {
+            Node<T> n = x.next;
             x.object = null;
             x.next = null;
             x.prev = null;
@@ -34,26 +38,29 @@ public class MyQueue {
         first = last = null;
         size = 0;
     }
-    public Object peek(){
-        return first.object;
+
+    public T peek() {
+        return (first != null) ? first.object : null;
     }
-    public Object poll(){
-        Node x = first;
-        Node p = x.prev;
-        Node n = x.next;
-        if (n!=null){
-            if (p==null){
-                n.prev = null;
-            }
-            else n.prev = p;
-            first=n;
+
+    public T poll() {
+        if (first == null) return null;
+        Node<T> x = first;
+        T obj = x.object;
+        Node<T> n = x.next;
+
+        first = n;
+        if (n == null) {
+            last = null;
+        } else {
+            n.prev = null;
         }
+
         size--;
-        return x.object;
+        return obj;
     }
 
     public int size() {
         return size;
     }
-
 }

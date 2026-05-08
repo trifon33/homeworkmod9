@@ -1,57 +1,62 @@
-
-public class MyHashMap {
-    private static class Node{
-        final Object key;
-        Object value;
-        Node next;
-        Node(Object key, Object value,Node next){
+public class MyHashMap<K, V> {
+    private static class Node<K, V>{
+        final K key;
+        V value;
+        private Node<K, V> next;
+        Node(K key, V value,Node<K, V> next){
             this.key=key;
             this.value=value;
             this.next=next;
         }
     }
+
+    private Node<K,V>[] table;
     private int size=0;
-    private Node head;
-    public void put(Object key, Object value){
-        Node current = head;
-        while (current!=null){
-            if (current.key.equals(key)){
-                current.value=value;
+    static int defaultsize = 16;
+
+    public MyHashMap() {
+        this.table = new Node[defaultsize];
+        this.size = 0;
+    }
+
+    public void put(K key, V value){
+        int index = calculateIndex(key);
+        Node<K,V> current = table[index];
+        while (current != null) {
+            if ((key == null && current.key == null) || (key != null && key.equals(current.key))) {
+                current.value = value;
                 return;
             }
-            else {
-                current=current.next;
-            }
+            current = current.next;
         }
-        head=new Node(key,value,head);
+        Node<K, V> newNode = new Node(key, value, table[index]);
+        table[index] = newNode;
         size++;
     }
-    public void remove(Object key){
-        Node current = head;
-        Node n=head.next;
-        if (head.key.equals(key)){
-            head=n;
-            size--;
-            return;
-        }
-        else {
-            while (n!=null){
-                if (n.key.equals(key)){
-                    current.next=n.next;
-                    size--;
-                    return;
+
+    public void remove(K key) {
+        int index = calculateIndex(key);
+        Node<K, V> current = table[index];
+        Node<K, V> prev = null;
+
+        while (current != null) {
+            if ((key == null && current.key == null) || (key != null && key.equals(current.key))) {
+                if (prev == null) {
+                    table[index] = current.next;
+                } else {
+                    prev.next = current.next;
                 }
-                else {
-                    current=current.next;
-                    n=current.next;
-                }
+                size--;
+                return;
             }
+            prev = current;
+            current = current.next;
         }
-        System.out.println("Impossible to find key : "+key);
     }
 
     public void clear(){
-        head=null;
+        Node<K, V>[] newtable=new Node[size];
+        table=newtable;
         size=0;
     }
 
@@ -59,16 +64,24 @@ public class MyHashMap {
         return size;
     }
 
-    public Object get(Object key){
-        Node current=head;
-        while (current!=null){
-            if (current.key.equals(key)){
+    public V get(K key) {
+        int index = calculateIndex(key);
+        Node<K, V> current = table[index];
+
+        while (current != null) {
+            if ((key == null && current.key == null) || (key != null && key.equals(current.key))) {
                 return current.value;
             }
-            current=current.next;
+            current = current.next;
         }
         System.out.println("Impossible to find key : "+key);
         return null;
     }
-}
 
+    private int calculateIndex(K key) {
+        if (key == null) {
+            return 0;
+        }
+        return Math.abs(key.hashCode()) % defaultsize;
+    }
+}

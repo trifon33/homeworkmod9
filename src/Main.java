@@ -46,14 +46,13 @@ public class Main {
         System.out.println();
 
         System.out.println("=== Тест MyHashMap ===");
-        MyHashMap map = new MyHashMap();
-        map.put("Key1", "Value1");
-        map.put("Key2", "Value2");
-        map.put("Key1", "UpdatedValue1");
-
-        System.out.println("Розмір: " + map.size());
-        System.out.println("Key1: " + map.get("Key1"));
-        map.remove("Key2");
-        System.out.println("Після видалення Key2, get: " + map.get("Key2"));
+        MyHashMap<String, String> map = new MyHashMap<>();
+        map.put("UA", "Ukraine");
+        map.put("UA", "United Ukraine");
+        map.put("USA", "United States of America");
+        map.remove("USA");
+        System.out.println(map.get("UA"));
+        System.out.println(map.get("USA"));
+        System.out.println(map.size());
     }
 }

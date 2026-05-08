@@ -1,31 +1,35 @@
-public class MyLinkedList {
-    private static class Node{
-        Object object;
-        Node prev;
-        Node next;
-        Node(Object object,Node prev, Node next){
-            this.object=object;
-            this.prev=prev;
-            this.next=next;
+public class MyLinkedList<T> {
+    private static class Node<T> {
+        T object;
+        Node<T> prev;
+        Node<T> next;
+
+        Node(T object, Node<T> prev, Node<T> next) {
+            this.object = object;
+            this.prev = prev;
+            this.next = next;
         }
     }
-    private int size=0;
-    private Node first;
-    private Node last;
-    public void add(Object object){
-        Node l = last;
-        Node node = new Node(object,last,null);
-        if (l==null){
-            this.first=node;
+
+    private int size = 0;
+    private Node<T> first;
+    private Node<T> last;
+
+    public void add(T object) {
+        Node<T> l = last;
+        Node<T> node = new Node<>(object, l, null);
+        if (l == null) {
+            this.first = node;
         } else {
-            l.next=node;
+            l.next = node;
         }
         this.last = node;
         this.size++;
     }
+
     public void clear() {
-        for (Node x = first; x != null; ) {
-            Node n = x.next;
+        for (Node<T> x = first; x != null; ) {
+            Node<T> n = x.next;
             x.object = null;
             x.next = null;
             x.prev = null;
@@ -34,34 +38,36 @@ public class MyLinkedList {
         first = last = null;
         size = 0;
     }
-    public void remove(int index){
-        Node x = find(index);
-        Node p = x.prev;
-        Node n = x.next;
-        if (p!=null){
-            if (n==null){
-                p.next = null;
-            }
-            else p.next = n;
-        }
-        if (n!=null){
-            if (p==null){
-                n.prev = null;
-            }
-            else n.prev = p;
+
+    public void remove(int index) {
+        Node<T> x = find(index);
+        Node<T> p = x.prev;
+        Node<T> n = x.next;
+
+        if (p != null) {
+            p.next = n;
+        } else {
+            first = n;
         }
 
-        x.prev=null;
-        x.next=null;
-        x.object=null;
+        if (n != null) {
+            n.prev = p;
+        } else {
+            last = p;
+        }
+
+        x.object = null;
+        x.prev = null;
+        x.next = null;
         size--;
     }
-    public Node find(int index) {
+
+    public Node<T> find(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size + "\n" + "Index out of range");
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
 
-        Node x;
+        Node<T> x;
         if (index < (size >> 1)) {
             x = first;
             for (int i = 0; i < index; i++) x = x.next;
@@ -71,10 +77,12 @@ public class MyLinkedList {
         }
         return x;
     }
+
     public int size() {
         return size;
     }
-    public Object get(int index){
+
+    public T get(int index) {
         return find(index).object;
     }
 }
