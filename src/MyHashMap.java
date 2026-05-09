@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class MyHashMap<K, V> {
     private static class Node<K, V>{
         final K key;
@@ -20,6 +22,7 @@ public class MyHashMap<K, V> {
     }
 
     public void put(K key, V value){
+
         int index = calculateIndex(key);
         Node<K,V> current = table[index];
         while (current != null) {
@@ -29,9 +32,16 @@ public class MyHashMap<K, V> {
             }
             current = current.next;
         }
+        if (table.length>=defaultsize){
+            grow();
+        }
         Node<K, V> newNode = new Node(key, value, table[index]);
         table[index] = newNode;
         size++;
+    }
+
+    public void grow() {
+        this.table = Arrays.copyOf(table, table.length + 1);
     }
 
     public void remove(K key) {
