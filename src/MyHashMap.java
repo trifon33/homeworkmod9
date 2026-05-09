@@ -32,16 +32,26 @@ public class MyHashMap<K, V> {
             }
             current = current.next;
         }
-        if (table.length>=defaultsize){
+        if (table.length==size){
             grow();
+            index = calculateIndex(key);
         }
+
         Node<K, V> newNode = new Node(key, value, table[index]);
         table[index] = newNode;
         size++;
     }
 
     public void grow() {
-        this.table = Arrays.copyOf(table, table.length + 1);
+        int index;
+        Node<K, V>[] newtable=new Node[table.length*2];
+        for (Node s : table){
+            if (s!=null){
+            index=calculateIndex((K) s.key);
+            newtable[index]=s;
+            }
+        }
+        this.table=Arrays.copyOf(newtable,table.length*2);
     }
 
     public void remove(K key) {
@@ -92,6 +102,9 @@ public class MyHashMap<K, V> {
         if (key == null) {
             return 0;
         }
-        return Math.abs(key.hashCode()) % defaultsize;
+        if (size<=defaultsize){
+            return Math.abs(key.hashCode()) % defaultsize;
+        }
+        return Math.abs(key.hashCode()) % table.length;
     }
 }

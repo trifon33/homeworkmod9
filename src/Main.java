@@ -51,6 +51,23 @@ public class Main {
         map.put("UA", "United Ukraine");
         map.put("USA", "United States of America");
         map.remove("USA");
+        map.put("UA1", "Ukraine");
+        map.put("UA2", "Ukraine");
+        map.put("UA3", "Ukraine");
+        map.put("UA4", "Ukraine");
+        map.put("UA5", "Ukraine");
+        map.put("UA6", "Ukraine");
+        map.put("UA7", "Ukraine");
+        map.put("UA8", "Ukraine");
+        map.put("UA9", "Ukraine");
+        map.put("UA10", "Ukraine");
+        map.put("UA11", "Ukraine");
+        map.put("UA12", "Ukraine");
+        map.put("UA13", "Ukraine");
+        map.put("UA14", "Ukraine");
+        map.put("UA15", "Ukraine");
+        map.put("UA16", "Ukraine");
+
         System.out.println(map.get("UA"));
         System.out.println(map.get("USA"));
         System.out.println(map.size());
